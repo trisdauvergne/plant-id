@@ -69,7 +69,7 @@ const Form = () => {
         <button type="button" onClick={sendIdentification}>OK</button>
       </form>
       {searchResults && <p>There are some results</p>}
-      {searchResults && <p>{searchResults.suggestions[0].plant_name}</p>}
+      {/* {searchResults && <p>{searchResults.suggestions[0].plant_name}</p>} */}
     </div>
   )
 }
