@@ -4,9 +4,11 @@ import ResultCard from '../ResultCard/ResultCard';
 const Form = () => {
   const [images, setImages] = useState([]);
   const [searchResults, setSearchResults] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const sendIdentification = () => {
+    setLoading(true);
     const files = [...images];
     const promises = files.map((file) => {
       return new Promise((resolve, reject) => {
@@ -53,6 +55,7 @@ const Form = () => {
         console.error('Error:', error);
       });
     })
+    setLoading(false);
   };
 
   return (
@@ -63,6 +66,7 @@ const Form = () => {
         <input type="file" multiple onChange={(e) => setImages(e.target.files)}/>
         <button type="button" onClick={sendIdentification}>OK</button>
       </form>
+      {loading && <p>Loading...</p>}
       {searchResults && searchResults.suggestions.map((result, i) => <ResultCard key={i} result={result} />)}
       {error && <p>Something went wrong</p>}
     </div>
