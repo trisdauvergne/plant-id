@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react';
+import ResultCard from '../ResultCard/ResultCard';
 
 const Form = () => {
   const [images, setImages] = useState([]);
-  const [searchResults, setSearchResults] = useState(null)
+  const [searchResults, setSearchResults] = useState(null);
+  const [error, setError] = useState(false);
 
   const sendIdentification = () => {
-    if (images) {
-      console.log(images);
-    }
     const files = [...images];
     const promises = files.map((file) => {
       return new Promise((resolve, reject) => {
@@ -19,7 +18,7 @@ const Form = () => {
           }
           reader.readAsDataURL(file)
       })
-    })
+    });
     
     Promise.all(promises).then((base64files) => {
       console.log(base64files)
@@ -50,14 +49,11 @@ const Form = () => {
         console.log('Success:', data);
       })
       .catch((error) => {
+        setError(true);
         console.error('Error:', error);
       });
     })
   };
-
-  useEffect(() => {
-    console.log('the search results', searchResults);
-  }, [searchResults])
 
   return (
     <div>
@@ -67,14 +63,8 @@ const Form = () => {
         <input type="file" multiple onChange={(e) => setImages(e.target.files)}/>
         <button type="button" onClick={sendIdentification}>OK</button>
       </form>
-      {searchResults && <p>There are some results</p>}
-      {searchResults && searchResults.suggestions.map(result => <div>
-        <p>{result.plant_name}</p>
-        <p>{result.plant_details.wiki_description.value}</p>
-        <a href={result.plant_details.wiki_description.value} target="_blank" rel="noreferrer"><p>Wiki</p></a>
-        <p>Images</p>
-        {result.similar_images.map(image => <p>{image.url}</p>)}
-      </div>)}
+      {searchResults && searchResults.suggestions.map((result, i) => <ResultCard key={i} result={result} />)}
+      {error && <p>Something went wrong</p>}
     </div>
   )
 }
