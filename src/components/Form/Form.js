@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ResultCard from '../ResultCard/ResultCard';
+import './form.scss';
 
 const Form = () => {
   const [images, setImages] = useState([]);
@@ -59,17 +60,20 @@ const Form = () => {
   };
 
   return (
-    <div>
+    <section className="form">
+      <div className="form-div">
       <h2>Form section</h2>
       {/* Added aria label below for testing */}
-      <form aria-label="form" onSubmit={sendIdentification}>
-        <input type="file" multiple onChange={(e) => setImages(e.target.files)}/>
-        <button type="button" onClick={sendIdentification}>OK</button>
+      <form className="form__elements" aria-label="form" onSubmit={sendIdentification}>
+        <input className="form__input" type="file" multiple onChange={(e) => setImages(e.target.files)}/>
+        <button className="form__btn" type="button" onClick={sendIdentification}>OK</button>
       </form>
       {loading && <p>Loading...</p>}
+      </div>
+
       {searchResults && searchResults.suggestions.map((result, i) => <ResultCard key={i} result={result} />)}
       {error && <p>Something went wrong</p>}
-    </div>
+    </section>
   )
 }
 

@@ -1,0 +1,19 @@
+@import '../../main';
+
+.form {
+  margin-bottom: $margin-btm;
+}
+
+.form-div {
+  text-align:center;
+  font-family: $body-font;
+  margin-bottom: $margin-btm;
+}
+
+.form__elements {
+  margin-bottom: $margin-btm;
+}
+
+.form__input, .form__btn {
+  font-family: $body-font;
+}
