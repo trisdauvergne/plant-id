@@ -1,6 +1,9 @@
 @import '../../main';
 
 footer {
+  width: 100vw;
   font-family: $body-font;
   text-align: center;
+  position: fixed;
+  bottom: 0;
 }
