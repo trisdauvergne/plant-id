@@ -1,0 +1,23 @@
+@import '../../main';
+
+.resultcard {
+  margin: auto;
+  width: 50%;
+  border: 1px dashed red;
+  font-family: $body-font;
+  display: flex;
+}
+
+.resultcard__text {
+  border: 1px dashed blue;
+  width: 50%;
+}
+
+.resultcard__images {
+  border: 1px dashed yellowgreen;
+  width: 50%;
+}
+
+.resultcard__image {
+  width: 100%;
+}

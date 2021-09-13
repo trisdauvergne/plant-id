@@ -25,7 +25,7 @@ describe('The form component', () => {
   });
 
   it('should return data after the button is clicked', async () => {
-    //  Arrange
+    // Arrange
     // Act
     // Assert
   });
