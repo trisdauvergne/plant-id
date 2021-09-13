@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ResultCard from '../ResultCard/ResultCard';
 import './form.scss';
 
 const Form = () => {
   const [images, setImages] = useState([]);
   const [searchResults, setSearchResults] = useState(null);
+  const [clear, setClear] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const ref = useRef();
+
+  const reset = () => {
+    ref.current.value = '';
+    setSearchResults(null);
+    setClear(false);
+  }
+
+  useEffect(() => {
+    setClear(true);
+  }, [setSearchResults]);
 
   const sendIdentification = () => {
     setLoading(true);
@@ -65,8 +77,9 @@ const Form = () => {
       <h2>Form section</h2>
       {/* Added aria label below for testing */}
       <form className="form__elements" aria-label="form" onSubmit={sendIdentification}>
-        <input className="form__input" type="file" multiple onChange={(e) => setImages(e.target.files)}/>
-        <button className="form__btn" type="button" onClick={sendIdentification}>OK</button>
+        <input ref={ref} className="form__input" type="file" multiple onChange={(e) => setImages(e.target.files)}/>
+        <button className="form__btn" type="button" onClick={sendIdentification}>Search</button>
+        {clear && <button onClick={reset}>Clear search</button>}
       </form>
       {loading && <p>Loading...</p>}
       </div>
