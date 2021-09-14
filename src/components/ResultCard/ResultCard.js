@@ -11,7 +11,7 @@ const ResultCard = ({ result }) => {
         <p>Read about {result.plant_name} <a href={result.plant_details.url} target="_blank" rel="noreferrer">here</a></p>
       </div>
       <div className="resultcard__images">
-        {result.similar_images.map(image => <img className="resultcard__image" src={image.url} alt="plant search result"/>)}
+        {result.similar_images.map((image, i) => <img key={i} className="resultcard__image" src={image.url} alt="plant search result"/>)}
       </div>
     </section>
   )

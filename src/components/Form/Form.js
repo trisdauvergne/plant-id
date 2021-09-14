@@ -2,88 +2,40 @@ import React, { useState, useRef, useEffect } from 'react';
 import ResultCard from '../ResultCard/ResultCard';
 import './form.scss';
 
-const Form = () => {
+const Form = ({ sendIdentification }) => {
   const [images, setImages] = useState([]);
   const [searchResults, setSearchResults] = useState(null);
   const [clear, setClear] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const ref = useRef();
+  
+  const inputRef = useRef();
 
-  const reset = () => {
-    ref.current.value = '';
+  const clearResults = () => {
+    inputRef.current.value = '';
     setSearchResults(null);
     setClear(false);
-  }
+  };
+
+  const formHandler = (e) => {
+    e.preventDefault();
+    sendIdentification(setLoading, images, setSearchResults, setError);
+  };
 
   useEffect(() => {
     setClear(true);
   }, [setSearchResults]);
 
-  const sendIdentification = () => {
-    setLoading(true);
-    const files = [...images];
-    const promises = files.map((file) => {
-      return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const res = event.target.result;
-            console.log(res);
-            resolve(res);
-          }
-          reader.readAsDataURL(file)
-      })
-    });
-    
-    Promise.all(promises).then((base64files) => {
-      console.log(base64files)
-            
-      const data = {
-        api_key: process.env.REACT_APP_API_KEY,
-        images: base64files,
-        modifiers: ["crops_fast", "similar_images"],
-        plant_language: "en",
-        plant_details: ["common_names",
-                          "url",
-                          "name_authority",
-                          "wiki_description",
-                          "taxonomy",
-                          "synonyms"]
-      };
-      
-      fetch('https://api.plant.id/v2/identify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-      .then(response => response.json())
-      .then(data => {
-        setSearchResults(data);
-        console.log('Success:', data);
-      })
-      .catch((error) => {
-        setError(true);
-        console.error('Error:', error);
-      });
-    })
-    setLoading(false);
-  };
-
   return (
     <section className="form">
       <div className="form-div">
-      <h2>Form section</h2>
-      {/* Added aria label below for testing */}
-      <form className="form__elements" aria-label="form" onSubmit={sendIdentification}>
-        <input ref={ref} className="form__input" type="file" multiple onChange={(e) => setImages(e.target.files)}/>
-        <button className="form__btn" type="button" onClick={sendIdentification}>Search</button>
-        {clear && <button onClick={reset}>Clear search</button>}
+      <form className="form__elements" aria-label="form" onSubmit={formHandler}>
+        <input ref={inputRef} className="form__input" type="file" multiple onChange={(e) => setImages(e.target.files)}/>
+        <button className="form__btn" type="submit">Search</button>
+        {clear && <button className="form__btn" onClick={clearResults}>Clear search</button>}
       </form>
       {loading && <p>Loading...</p>}
       </div>
-
       {searchResults && searchResults.suggestions.map((result, i) => <ResultCard key={i} result={result} />)}
       {error && <p>Something went wrong</p>}
     </section>
